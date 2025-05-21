@@ -9,8 +9,6 @@ module org.example.assignment3 {
     requires java.sql;
     requires java.desktop;
 
-    opens com.example.assignment3 to javafx.fxml;
-    exports com.example.assignment3;
-    exports Presentation;
-    opens Presentation to javafx.fxml;
+    exports Controllers;
+    opens Controllers to javafx.fxml;
 }

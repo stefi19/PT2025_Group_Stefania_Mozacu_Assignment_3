@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.MainController">
+    <children>
+        <VBox spacing="15" alignment="CENTER" layoutX="50" layoutY="50" prefWidth="400" prefHeight="300">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Orders Management System" style="-fx-font-size: 20px;"/>
+            <Button text="Manage Clients" onAction="#openClientWindow" />
+            <Button text="Manage Products" onAction="#openProductWindow" />
+            <Button text="Place Order" onAction="#openOrderWindow" />
+        </VBox>
+    </children>
+</AnchorPane>

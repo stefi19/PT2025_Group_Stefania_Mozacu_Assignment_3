@@ -34,30 +34,25 @@ public class AbstractDAO<T> {
     }
     public List<T> findAll()
     {
-        Connection connection=null;
-        PreparedStatement statement=null;
-        ResultSet resultSet=null;
-        String query=createSelectQuery(type.getSimpleName());
-        try
-        {
-            connection=ConnectionFactory.getConnection();
-            statement=connection.prepareStatement(query);
-            resultSet=statement.executeQuery();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM " + type.getSimpleName();
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
             return createObjects(resultSet);
-        }
-        catch(SQLException e)
-        {
-            LOGGER.log(Level.WARNING, type.getName()+"DAO:findAll "+e.getMessage());
-        }
-        finally
-        {
+        } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, type.getName() + "DAO:findAll " + e.getMessage());
+        } finally {
             ConnectionFactory.close(resultSet);
             ConnectionFactory.close(statement);
             ConnectionFactory.close(connection);
         }
         return new ArrayList<>();
     }
-
     public T findById(int id)
     {
         Connection connection=null;
@@ -135,7 +130,7 @@ public class AbstractDAO<T> {
         {
             connection=ConnectionFactory.getConnection();
             StringBuilder query = new StringBuilder();
-            query.append("INSERT INTO ").append(type.getSimpleName()).append(" (");
+            query.append("INSERT INTO `").append(type.getSimpleName()).append("` (");
             StringBuilder values = new StringBuilder();
             List<Object> parameters = new ArrayList<>();
             for (Field field : type.getDeclaredFields())

@@ -51,4 +51,9 @@ public class Client {
     {
         this.address=address;
     }
+    @Override
+    public String toString() {
+        return name + " (" + email + ")";
+    }
+
 }
