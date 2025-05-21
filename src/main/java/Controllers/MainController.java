@@ -6,7 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class MainController {
+public class MainController
+{
     @FXML
     private void openClientWindow()
     {
@@ -22,15 +23,18 @@ public class MainController {
     {
         loadWindow("/Presentation/OrdersWindow.fxml", "Place Order");
     }
-    private void loadWindow(String fxmlPath, String title) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            Stage stage = new Stage();
+    private void loadWindow(String fxmlPath, String title)
+    {
+        try
+        {
+            FXMLLoader loader=new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root=loader.load();
+            Stage stage=new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

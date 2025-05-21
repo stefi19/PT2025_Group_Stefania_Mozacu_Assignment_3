@@ -1,52 +1,42 @@
 package DataAccessObject;
 
 import Connection.ConnectionFactory;
-
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AbstractDAO<T> {
-    protected static final Logger LOGGER = Logger.getLogger(AbstractDAO.class.getName());
+    protected static final Logger LOGGER=Logger.getLogger(AbstractDAO.class.getName());
     private final Class<T> type;
     @SuppressWarnings("unchecked")
-    public AbstractDAO()
-    {
-        this.type=(Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+    public AbstractDAO(){this.type=(Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];}
     private String createSelectQuery(String field)
     {
         StringBuilder sb=new StringBuilder();
-        sb.append("SELECT ");
-        sb.append(" * ");
-        sb.append(" FROM ");
-        sb.append(type.getSimpleName());
-        sb.append(" WHERE "+field+" =?");
+        sb.append("SELECT * FROM ").append(type.getSimpleName()).append(" WHERE ").append(field).append(" =?");
         return sb.toString();
     }
     public List<T> findAll()
     {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        String query = "SELECT * FROM " + type.getSimpleName();
-
-        try {
-            connection = ConnectionFactory.getConnection();
-            statement = connection.prepareStatement(query);
-            resultSet = statement.executeQuery();
+        Connection connection=null;
+        PreparedStatement statement=null;
+        ResultSet resultSet=null;
+        String query="SELECT * FROM "+type.getSimpleName();
+        try
+        {
+            connection=ConnectionFactory.getConnection();
+            statement=connection.prepareStatement(query);
+            resultSet=statement.executeQuery();
             return createObjects(resultSet);
-        } catch (SQLException e) {
-            LOGGER.log(Level.WARNING, type.getName() + "DAO:findAll " + e.getMessage());
-        } finally {
+        } catch(SQLException e)
+        {
+            LOGGER.log(Level.WARNING,type.getName()+"DAO:findAll "+e.getMessage());
+        } finally
+        {
             ConnectionFactory.close(resultSet);
             ConnectionFactory.close(statement);
             ConnectionFactory.close(connection);
@@ -63,12 +53,12 @@ public class AbstractDAO<T> {
         {
             connection=ConnectionFactory.getConnection();
             statement=connection.prepareStatement(query);
-            statement.setInt(1, id);
+            statement.setInt(1,id);
             resultSet=statement.executeQuery();
             return createObjects(resultSet).get(0);
-        } catch (SQLException e)
+        } catch(SQLException e)
         {
-            LOGGER.log(Level.WARNING, type.getName()+"DAO:findById "+e.getMessage());
+            LOGGER.log(Level.WARNING,type.getName()+"DAO:findById "+e.getMessage());
         } finally
         {
             ConnectionFactory.close(resultSet);
@@ -79,89 +69,75 @@ public class AbstractDAO<T> {
     }
     private List<T> createObjects(ResultSet resultSet)
     {
-        List<T> list=new ArrayList<T>();
+        List<T> list=new ArrayList<>();
         Constructor[] ctors=type.getDeclaredConstructors();
         Constructor ctor=null;
-        int i;
-        for (i=0; i<ctors.length; i++)
+        for(Constructor c:ctors)
         {
-            ctor=ctors[i];
-            if (ctor.getGenericParameterTypes().length==0)
-                break;
+            if(c.getGenericParameterTypes().length==0){ctor=c;break;}
         }
         try
         {
-            while (resultSet.next())
+            while(resultSet.next())
             {
                 ctor.setAccessible(true);
-                T instance = (T)ctor.newInstance();
-                for (Field field : type.getDeclaredFields())
+                T instance=(T)ctor.newInstance();
+                for(Field field:type.getDeclaredFields())
                 {
                     String fieldName=field.getName();
                     Object value=resultSet.getObject(fieldName);
-                    PropertyDescriptor propertyDescriptor=new PropertyDescriptor(fieldName, type);
-                    Method method=propertyDescriptor.getWriteMethod();
-                    method.invoke(instance, value);
+                    PropertyDescriptor pd=new PropertyDescriptor(fieldName,type);
+                    Method method=pd.getWriteMethod();
+                    method.invoke(instance,value);
                 }
                 list.add(instance);
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IntrospectionException e) {
+        } catch(Exception e)
+        {
             e.printStackTrace();
         }
         return list;
     }
-
-    public T insert(T t) {
+    public T insert(T t)
+    {
         Connection connection=null;
         PreparedStatement statement=null;
         try
         {
             connection=ConnectionFactory.getConnection();
-            StringBuilder query = new StringBuilder();
-            query.append("INSERT INTO `").append(type.getSimpleName()).append("` (");
-            StringBuilder values = new StringBuilder();
-            List<Object> parameters = new ArrayList<>();
-            for (Field field : type.getDeclaredFields())
+            StringBuilder query=new StringBuilder();
+            query.append("INSERT INTO ").append(type.getSimpleName()).append(" (");
+            StringBuilder values=new StringBuilder();
+            List<Object> params=new ArrayList<>();
+            for(Field field:type.getDeclaredFields())
             {
                 field.setAccessible(true);
-                if (!field.getName().equalsIgnoreCase("id"))
+                if(!field.getName().equalsIgnoreCase("id"))
                 {
                     query.append(field.getName()).append(",");
                     values.append("?,");
-                    parameters.add(field.get(t));
+                    params.add(field.get(t));
                 }
             }
-            // Remove last commas
-            query.setLength(query.length() - 1);
-            values.setLength(values.length() - 1);
+            query.setLength(query.length()-1);
+            values.setLength(values.length()-1);
             query.append(") VALUES (").append(values).append(")");
-            statement = connection.prepareStatement(query.toString());
-            int i;
-            for(i=0; i<parameters.size(); i++)
-                statement.setObject(i+1,parameters.get(i));
+            statement=connection.prepareStatement(query.toString());
+            for(int i=0;i<params.size();i++) statement.setObject(i+1,params.get(i));
             statement.executeUpdate();
             return t;
-        } catch (IllegalAccessException | SQLException e) {
-            LOGGER.log(Level.WARNING, type.getName() + "DAO:insert " + e.getMessage());
-        } finally {
+        } catch(Exception e)
+        {
+            LOGGER.log(Level.WARNING,type.getName()+"DAO:insert "+e.getMessage());
+        } finally
+        {
             ConnectionFactory.close(statement);
             ConnectionFactory.close(connection);
         }
         return null;
     }
-    public T update(T t) {
+    public T update(T t)
+    {
         Connection connection=null;
         PreparedStatement statement=null;
         try
@@ -169,35 +145,29 @@ public class AbstractDAO<T> {
             connection=ConnectionFactory.getConnection();
             StringBuilder query=new StringBuilder();
             query.append("UPDATE ").append(type.getSimpleName()).append(" SET ");
-            List<Object> parameters=new ArrayList<>();
+            List<Object> params=new ArrayList<>();
             Object idValue=null;
-            for (Field field : type.getDeclaredFields())
+            for(Field field:type.getDeclaredFields())
             {
                 field.setAccessible(true);
-                if (!field.getName().equalsIgnoreCase("id"))
+                if(!field.getName().equalsIgnoreCase("id"))
                 {
-                    query.append(field.getName()).append(" = ?, ");
-                    parameters.add(field.get(t));
-                } else
-                {
-                    idValue=field.get(t); // save ID for WHERE clause
-                }
+                    query.append(field.getName()).append("=?,");
+                    params.add(field.get(t));
+                } else idValue=field.get(t);
             }
-            // Remove last comma and space
-            query.setLength(query.length() - 2);
-            query.append(" WHERE id = ?");
-            statement = connection.prepareStatement(query.toString());
-            int i;
-            for (i=0; i<parameters.size(); i++)
-            {
-                statement.setObject(i+1, parameters.get(i));
-            }
-            statement.setObject(parameters.size()+1, idValue);
+            query.setLength(query.length()-1);
+            query.append(" WHERE id=?");
+            statement=connection.prepareStatement(query.toString());
+            for(int i=0;i<params.size();i++) statement.setObject(i+1,params.get(i));
+            statement.setObject(params.size()+1,idValue);
             statement.executeUpdate();
             return t;
-        } catch (IllegalAccessException | SQLException e) {
-            LOGGER.log(Level.WARNING, type.getName() + "DAO:update " + e.getMessage());
-        } finally {
+        } catch(Exception e)
+        {
+            LOGGER.log(Level.WARNING,type.getName()+"DAO:update "+e.getMessage());
+        } finally
+        {
             ConnectionFactory.close(statement);
             ConnectionFactory.close(connection);
         }
@@ -213,13 +183,13 @@ public class AbstractDAO<T> {
             Field idField=type.getDeclaredField("id");
             idField.setAccessible(true);
             Object idValue=idField.get(t);
-            String query="DELETE FROM "+type.getSimpleName()+" WHERE id = ?";
+            String query="DELETE FROM "+type.getSimpleName()+" WHERE id=?";
             statement=connection.prepareStatement(query);
-            statement.setObject(1, idValue);
+            statement.setObject(1,idValue);
             statement.executeUpdate();
-        } catch (Exception e)
+        } catch(Exception e)
         {
-            LOGGER.log(Level.WARNING, type.getName() + "DAO:delete " + e.getMessage());
+            LOGGER.log(Level.WARNING,type.getName()+"DAO:delete "+e.getMessage());
         } finally
         {
             ConnectionFactory.close(statement);
@@ -227,4 +197,3 @@ public class AbstractDAO<T> {
         }
     }
 }
-
