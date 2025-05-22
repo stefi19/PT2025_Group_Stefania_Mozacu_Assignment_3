@@ -11,4 +11,9 @@ module org.example.assignment3 {
 
     exports Controllers;
     opens Controllers to javafx.fxml;
+    exports Connection;
+    exports BusinessLogicLayer;
+    exports BusinessLogicLayer.Validators;
+    exports DataAccessObject;
+    exports Model;
 }
