@@ -45,9 +45,14 @@ public class MainController
         {
             FXMLLoader loader=new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root=loader.load();
+            Scene scene=new Scene(root);
+
+            // Load your CSS for all windows here:
+            scene.getStylesheets().add(getClass().getResource("/Presentation/style.css").toExternalForm());
+
             Stage stage=new Stage();
             stage.setTitle(title);
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.show();
         } catch (Exception e)
         {

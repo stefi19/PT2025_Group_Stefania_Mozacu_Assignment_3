@@ -1,0 +1,153 @@
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #ffe6f0, #ffcce6);
+}
+
+.label {
+    -fx-text-fill: #9b2c65;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-color: #e91e63;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(233,30,99,0.5), 4, 0, 0, 2);
+    -fx-font-size: 14px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    -fx-background-color: #c2185b;
+    -fx-effect: dropshadow(gaussian, rgba(194,24,91,0.7), 6, 0, 0, 4);
+}
+
+.button:pressed {
+    -fx-background-color: #880e4f;
+}
+
+.text-field, .combo-box {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #f48fb1;
+    -fx-padding: 8 15 8 15;
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #e91e63;
+    -fx-effect: dropshadow(gaussian, rgba(233,30,99,0.4), 5, 0, 0, 2);
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 15;
+    -fx-border-color: #f8bbd0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 5, 0, 0, 2);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #e91e63, #c2185b);
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header, .table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #fce4ec;
+}
+
+.label#error-message {
+    -fx-text-fill: #d81b60;
+    -fx-font-weight: bold;
+}
+
+.vbox, .hbox {
+    -fx-spacing: 12;
+}
+
+.pane {
+    -fx-padding: 15;
+}
+
+.border-pane > .center {
+    -fx-padding: 25;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+
+.tooltip {
+    -fx-background-color: #e91e63;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8;
+    -fx-padding: 8 10 8 10;
+}
+/* Make all text fields, combo boxes, and text areas have a pink background and white text */
+.text-field, .combo-box, .text-area {
+    -fx-background-color: #ffb6c1; /* light pink */
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #ffe4e1; /* lighter pink for placeholder */
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #ff69b4; /* hot pink border */
+    -fx-border-width: 2;
+    -fx-font-weight: bold;
+}
+
+/* Table header background pink with white text */
+.table-view .column-header-background {
+    -fx-background-color: #ff69b4; /* hot pink */
+}
+.table-view .column-header, .table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Table row alternating colors for better readability */
+.table-row-cell:odd {
+    -fx-background-color: #ffe4e1; /* very light pink */
+}
+.table-row-cell:even {
+    -fx-background-color: #fff0f5; /* lavender blush */
+}
+
+/* Selected row highlight */
+.table-row-cell:selected {
+    -fx-background-color: #ff69b4; /* hot pink */
+    -fx-text-fill: white;
+}
+
+/* Table cell text color */
+.table-cell {
+    -fx-text-fill: #4b0082; /* indigo for contrast */
+    -fx-font-weight: normal;
+}
+
+/* Buttons styling */
+.button {
+    -fx-background-color: #ff69b4;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+}
+.button:hover {
+    -fx-background-color: #ff1493; /* deeper pink on hover */
+}

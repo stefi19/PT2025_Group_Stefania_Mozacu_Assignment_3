@@ -139,7 +139,7 @@ public class AbstractDAO<T> {
         {
             connection=ConnectionFactory.getConnection();
             StringBuilder query=new StringBuilder();
-            query.append("INSERT INTO ").append(type.getSimpleName()).append(" (");
+            query.append("INSERT INTO `").append(type.getSimpleName()).append("` (");
             StringBuilder values=new StringBuilder();
             List<Object> params=new ArrayList<>();
             for(Field field:type.getDeclaredFields())
@@ -182,7 +182,7 @@ public class AbstractDAO<T> {
         {
             connection=ConnectionFactory.getConnection();
             StringBuilder query=new StringBuilder();
-            query.append("UPDATE ").append(type.getSimpleName()).append(" SET ");
+            query.append("UPDATE `").append(type.getSimpleName()).append("` SET ");
             List<Object> params=new ArrayList<>();
             Object idValue=null;
             for(Field field:type.getDeclaredFields())
@@ -225,7 +225,7 @@ public class AbstractDAO<T> {
             Field idField=type.getDeclaredField("id");
             idField.setAccessible(true);
             Object idValue=idField.get(t);
-            String query="DELETE FROM "+type.getSimpleName()+" WHERE id=?";
+            String query="DELETE FROM `"+type.getSimpleName()+"` WHERE id=?";
             statement=connection.prepareStatement(query);
             statement.setObject(1,idValue);
             statement.executeUpdate();

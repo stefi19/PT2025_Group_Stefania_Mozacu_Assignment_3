@@ -26,22 +26,18 @@ public class OrderBLL {
         this.billDAO=new BillDAO();
     }
     /**
-     * Creates an order if product has enough pieces in stock.
-     * Decrements product stock, then inserts order and bill in the database.
+     * Business logic for orders.
+     * Handles order creation, stock update, and bill generation.
      * @param order that needs to be created
      * @param clientName client's name for the bill
      * @param productName product's name for the bill
-     * @return true if order was successfully created, false otherwise
      */
-    public boolean createOrder(Order order, String clientName, String productName)
-    {
-        try
-        {
+    public Bill createOrder(Order order, String clientName, String productName){
+        try{
             Product product=productDAO.findById(order.getProductId());
-            if(product==null||product.getQuantity()<order.getQuantity())
-            {
+            if(product==null || product.getQuantity()<order.getQuantity()){
                 LOGGER.warning("Not enough stock or product not found");
-                return false;
+                return null;
             }
             product.setQuantity(product.getQuantity()-order.getQuantity());
             productDAO.update(product);
@@ -50,12 +46,10 @@ public class OrderBLL {
             Bill bill=new Bill(0,clientName,productName,order.getQuantity(),total,LocalDateTime.now());
             billDAO.insert(bill);
             LOGGER.info("Order created successfully");
-            return true;
-        }
-        catch(Exception e)
-        {
-            LOGGER.log(Level.SEVERE, "Error creating order", e);
-            return false;
+            return bill;
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE,"Error creating order",e);
+            return null;
         }
     }
 }

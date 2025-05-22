@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.BillWindowController"
+      spacing="10" alignment="TOP_CENTER" style="-fx-background-color: white; -fx-padding: 20; -fx-font-family: 'Courier New';">
+
+    <Label text="RECEIPT" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    <Separator />
+
+    <Label fx:id="clientNameLabel" style="-fx-font-size: 16px;" />
+    <Label fx:id="productNameLabel" style="-fx-font-size: 16px;" />
+    <Label fx:id="quantityLabel" style="-fx-font-size: 16px;" />
+    <Label fx:id="totalPriceLabel" style="-fx-font-size: 16px;" />
+    <Label fx:id="dateLabel" style="-fx-font-size: 14px; -fx-text-fill: gray;" />
+
+    <Separator />
+
+    <Label text="Thank you for your purchase!" style="-fx-font-size: 14px; -fx-font-style: italic;" />
+</VBox>

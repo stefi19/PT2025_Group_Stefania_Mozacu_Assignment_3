@@ -19,6 +19,7 @@ public class HelloApplication extends Application
     {
         FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("/Presentation/MainWindow.fxml"));
         Scene scene=new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(getClass().getResource("/Presentation/style.css").toExternalForm());
         stage.setTitle("Home - Orders Management");
         stage.setScene(scene);
         stage.show();
