@@ -23,7 +23,9 @@ public class ConnectionFactory {
     private static final String PASS="Stef0578";
 
     private static ConnectionFactory singleInstance=new ConnectionFactory();
-
+    /**
+     * Private constructor that loads the java database connection driver class.
+     */
     private ConnectionFactory()
     {
         try
@@ -34,7 +36,9 @@ public class ConnectionFactory {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Creates a new database connection.
+     */
     private Connection createConnection()
     {
         Connection connection=null;
@@ -48,10 +52,17 @@ public class ConnectionFactory {
         }
         return connection;
     }
+    /**
+     * Gets a database connection from the instance.
+     */
     public static Connection getConnection()
     {
         return singleInstance.createConnection();
     }
+    /**
+     * Closes a database connection
+     * @param connection to close
+     */
     public static void close(Connection connection)
     {
         if (connection!=null) {
@@ -64,6 +75,10 @@ public class ConnectionFactory {
             }
         }
     }
+    /**
+     * Closes a statement
+     * @param statement to close
+     */
     public static void close(Statement statement)
     {
         if (statement!=null)
@@ -77,6 +92,10 @@ public class ConnectionFactory {
             }
         }
     }
+    /**
+     * Closes a ResultSet
+     * @param resultSet to close
+     */
     public static void close(ResultSet resultSet)
     {
         if (resultSet!=null)

@@ -8,18 +8,36 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/**
+ * Generic DAO class for CRUD operations using reflection.
+ * @param <T> Type of the model class mapped to the database table.
+ */
 public class AbstractDAO<T> {
     protected static final Logger LOGGER=Logger.getLogger(AbstractDAO.class.getName());
     private final Class<T> type;
+    /**
+     * Constructor that determines the class type T via reflection.
+     */
     @SuppressWarnings("unchecked")
-    public AbstractDAO(){this.type=(Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];}
+    public AbstractDAO()
+    {
+        this.type=(Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+    /**
+     * Builds SELECT query for a field.
+     * @param field name for WHERE clause.
+     * @return SQL SELECT query string.
+     */
     private String createSelectQuery(String field)
     {
         StringBuilder sb=new StringBuilder();
         sb.append("SELECT * FROM ").append(type.getSimpleName()).append(" WHERE ").append(field).append(" =?");
         return sb.toString();
     }
+    /**
+     * Returns all data from the table mapped to type T.
+     * @return List of type T objects.
+     */
     public List<T> findAll()
     {
         Connection connection=null;
@@ -43,6 +61,11 @@ public class AbstractDAO<T> {
         }
         return new ArrayList<>();
     }
+    /**
+     * Finds data by id.
+     * @param id
+     * @return Object T or null if not found.
+     */
     public T findById(int id)
     {
         Connection connection=null;
@@ -67,6 +90,11 @@ public class AbstractDAO<T> {
         }
         return null;
     }
+    /**
+     * Maps ResultSet rows to list of objects of type T using reflection.
+     * @param resultSet from database query.
+     * @return List of objects T.
+     */
     private List<T> createObjects(ResultSet resultSet)
     {
         List<T> list=new ArrayList<>();
@@ -98,6 +126,11 @@ public class AbstractDAO<T> {
         }
         return list;
     }
+    /**
+     * Inserts object into database table.
+     * @param t Object to insert.
+     * @return Inserted object or null on failure.
+     */
     public T insert(T t)
     {
         Connection connection=null;
@@ -136,6 +169,11 @@ public class AbstractDAO<T> {
         }
         return null;
     }
+    /**
+     * Updates object in database table by id
+     * @param t Object to update.
+     * @return Updated object or null on failure.
+     */
     public T update(T t)
     {
         Connection connection=null;
@@ -173,6 +211,10 @@ public class AbstractDAO<T> {
         }
         return null;
     }
+    /**
+     * Deletes object from database table by id
+     * @param t Object to delete
+     */
     public void delete(T t)
     {
         Connection connection=null;

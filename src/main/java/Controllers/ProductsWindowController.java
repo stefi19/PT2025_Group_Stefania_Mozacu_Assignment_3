@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
+/**
+ * Controller for managing products, it allows adding, editing, deleting products and viewing them in a TableView.
+ */
 public class ProductsWindowController {
     @FXML private TableView<Product> productTable;
     @FXML private TextField nameField;
@@ -15,6 +17,9 @@ public class ProductsWindowController {
 
     private final ProductBLL productBLL=new ProductBLL();
     private final ObservableList<Product> products=FXCollections.observableArrayList();
+    /**
+     * Initializes the controller, it sets up table and loads products, also listens for row selection to populate form fields.
+     */
     @FXML
     public void initialize()
     {
@@ -28,6 +33,9 @@ public class ProductsWindowController {
             }
         });
     }
+    /**
+     * Configures the columns of the productTable.
+     */
     private void setupTable()
     {
         TableColumn<Product, Integer> idCol=new TableColumn<>("ID");
@@ -41,10 +49,16 @@ public class ProductsWindowController {
         productTable.getColumns().addAll(idCol, nameCol, qtyCol, priceCol);
         productTable.setItems(products);
     }
+    /**
+     * Loads products from the database and updates table data
+     */
     @FXML
     public void loadProducts() {
         products.setAll(productBLL.findAll());
     }
+    /**
+     * Handles adding a new product from form fields and shows error alert on failure.
+     */
     @FXML
     public void handleAddProduct()
     {
@@ -63,6 +77,9 @@ public class ProductsWindowController {
             showAlert("Error", e.getMessage());
         }
     }
+    /**
+     * Handles deleting the selected product.
+     */
     @FXML
     public void handleDeleteProduct()
     {
@@ -73,6 +90,9 @@ public class ProductsWindowController {
             loadProducts();
         }
     }
+    /**
+     * Handles editing selected product with form data and shows error if no selection or update fails.
+     */
     @FXML
     public void handleEditProduct()
     {
@@ -96,12 +116,20 @@ public class ProductsWindowController {
             showAlert("No Selection", "Please select a product to edit.");
         }
     }
+    /**
+     * Clears all input fields.
+     */
     private void clearForm()
     {
         nameField.clear();
         quantityField.clear();
         priceField.clear();
     }
+    /**
+     * Shows an error alert dialog.
+     * @param title of the alert window.
+     * @param message to show inside the alert.
+     */
     private void showAlert(String title, String message)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);

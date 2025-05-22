@@ -12,7 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Controller for managing clients in the graphical user interface
+ * Allows adding, deleting, editing, and viewing clients
+ */
 public class ClientsWindowController {
     @FXML private TableView<Client> clientTable;
     @FXML private TextField nameField;
@@ -21,7 +24,9 @@ public class ClientsWindowController {
 
     private final ClientBLL clientBLL=new ClientBLL();
     private final ObservableList<Client> clients=FXCollections.observableArrayList();
-
+    /**
+     * Initializes the controller, it sets up table and loads clients, also listens for row selection to populate form fields.
+     */
     @FXML
     public void initialize()
     {
@@ -36,6 +41,9 @@ public class ClientsWindowController {
             }
         });
     }
+    /**
+     * Configures table columns and the client properties
+     */
     private void setupTable()
     {
         TableColumn<Client, Integer> idCol = new TableColumn<>("ID");
@@ -49,11 +57,16 @@ public class ClientsWindowController {
         clientTable.getColumns().addAll(idCol, nameCol, emailCol, addressCol);
         clientTable.setItems(clients);
     }
+    /**
+     * Loads all clients from business logic layer into the table
+     */
     @FXML
     public void loadClients() {
         clients.setAll(clientBLL.findAll());
     }
-
+    /**
+     * Handles adding a new client from form fields and shows error alert on failure.
+     */
     @FXML
     public void handleAddClient()
     {
@@ -68,6 +81,9 @@ public class ClientsWindowController {
             showAlert("Error", e.getMessage());
         }
     }
+    /**
+     * Handles deleting selected client from table.
+     */
     @FXML
     public void handleDeleteClient()
     {
@@ -78,6 +94,9 @@ public class ClientsWindowController {
             loadClients();
         }
     }
+    /**
+     * Handles editing selected client with form data and shows error if no selection or update fails.
+     */
     @FXML
     public void handleEditClient()
     {
@@ -101,12 +120,20 @@ public class ClientsWindowController {
             showAlert("No Selection", "Please select a client to edit.");
         }
     }
+    /**
+     * Clears all form text fields
+     */
     private void clearForm()
     {
         nameField.clear();
         emailField.clear();
         addressField.clear();
     }
+    /**
+     * Shows an error alert dialog.
+     * @param title of the alert window.
+     * @param message to show inside the alert.
+     */
     private void showAlert(String title, String message)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);

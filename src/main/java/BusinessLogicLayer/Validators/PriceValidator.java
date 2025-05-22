@@ -1,7 +1,14 @@
 package BusinessLogicLayer.Validators;
 import Model.Product;
+/**
+ * Validates that the price of a product is not negative.
+ */
 public class PriceValidator implements Validator<Product>
 {
+    /**
+     * Validates that the product price is non-negative.
+     * @param p the Product to validate
+     */
     @Override
     public void validate(Product p)
     {

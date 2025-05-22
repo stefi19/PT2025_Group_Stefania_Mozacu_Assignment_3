@@ -8,17 +8,31 @@ import Model.Product;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+/**
+ * Business logic for handling orders.
+ */
 public class OrderBLL {
     private static final Logger LOGGER=Logger.getLogger(OrderBLL.class.getName());
     private final OrderDAO orderDAO;
     private final ProductDAO productDAO;
     private final BillDAO billDAO;
+    /**
+     * Constructor to initialize data access to orders, products and bills.
+     */
     public OrderBLL()
     {
         this.orderDAO=new OrderDAO();
         this.productDAO=new ProductDAO();
         this.billDAO=new BillDAO();
     }
+    /**
+     * Creates an order if product has enough pieces in stock.
+     * Decrements product stock, then inserts order and bill in the database.
+     * @param order that needs to be created
+     * @param clientName client's name for the bill
+     * @param productName product's name for the bill
+     * @return true if order was successfully created, false otherwise
+     */
     public boolean createOrder(Order order, String clientName, String productName)
     {
         try

@@ -5,8 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main JavaFX application class that loads and shows the main window.
+ */
 public class HelloApplication extends Application
 {
+    /**
+     * Loads the main window FXML and displays it
+     * @param stage The primary stage for this application.
+     */
     @Override
     public void start(Stage stage) throws Exception
     {
@@ -16,6 +23,10 @@ public class HelloApplication extends Application
         stage.setScene(scene);
         stage.show();
     }
+    /**
+     * Main method, launches the JavaFX application.
+     * @param args Command line arguments (unused)
+     */
     public static void main(String[] args) {
         launch();
     }
