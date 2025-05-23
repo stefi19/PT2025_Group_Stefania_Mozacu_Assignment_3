@@ -23,8 +23,8 @@ public class ProductsWindowController {
     @FXML
     public void initialize()
     {
-        setupTable();
         loadProducts();
+        setupTable();
         productTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal!=null) {
                 nameField.setText(newVal.getName());
@@ -38,16 +38,7 @@ public class ProductsWindowController {
      */
     private void setupTable()
     {
-        TableColumn<Product, Integer> idCol=new TableColumn<>("ID");
-        idCol.setCellValueFactory(data->new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
-        TableColumn<Product, String> nameCol=new TableColumn<>("Name");
-        nameCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getName()));
-        TableColumn<Product, Integer> qtyCol=new TableColumn<>("Quantity");
-        qtyCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
-        TableColumn<Product, Double> priceCol=new TableColumn<>("Price");
-        priceCol.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getPrice()).asObject());
-        productTable.getColumns().addAll(idCol, nameCol, qtyCol, priceCol);
-        productTable.setItems(products);
+        ReflectionTable.populateTable(productTable, products);
     }
     /**
      * Loads products from the database and updates table data

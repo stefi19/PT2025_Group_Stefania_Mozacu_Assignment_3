@@ -30,8 +30,8 @@ public class ClientsWindowController {
     @FXML
     public void initialize()
     {
-        setupTable();
         loadClients();
+        setupTable();
         clientTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal!=null)
             {
@@ -46,16 +46,7 @@ public class ClientsWindowController {
      */
     private void setupTable()
     {
-        TableColumn<Client, Integer> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
-        TableColumn<Client, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getName()));
-        TableColumn<Client, String> emailCol = new TableColumn<>("Email");
-        emailCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmail()));
-        TableColumn<Client, String> addressCol = new TableColumn<>("Address");
-        addressCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getAddress()));
-        clientTable.getColumns().addAll(idCol, nameCol, emailCol, addressCol);
-        clientTable.setItems(clients);
+        ReflectionTable.populateTable(clientTable, clients);
     }
     /**
      * Loads all clients from business logic layer into the table
